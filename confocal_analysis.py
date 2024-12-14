@@ -137,7 +137,7 @@ with open('data_confocal/output.txt', 'a') as file:
                 'volt_laser': volt_laser}
         df = pd.DataFrame(data)
 
-        new_file_path = f"data_non_confocal/clean_data/{title}_calib.csv"
+        new_file_path = f"data_confocal/clean_data/{title}_calib.csv"
         df.to_csv(new_file_path, index=False)
         print(f"Data saved to {new_file_path}")
 
@@ -159,6 +159,6 @@ with open('data_confocal/output.txt', 'a') as file:
               'lor_d_gamma': dgamma}
 
         df_pk = pd.DataFrame(pk)
-        pk_file_path = f"data_non_confocal/clean_data/{title}_peaks.csv"
+        pk_file_path = f"data_confocal/clean_data/{title}_peaks.csv"
         df_pk.to_csv(pk_file_path, index=False)
         print(f"Peaks saved to {pk_file_path}")

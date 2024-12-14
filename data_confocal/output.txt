@@ -2217,3 +2217,201 @@ a = 10692921.344951151 Hz/V^2
 b = 533645003.3278675 Hz/V
 c = 2655446385.3899646 Hz
 
+file: scope_15
+Assuming confocality
+linear coeffs (m * x + q)
+m = 521394026.3563965 +/- 20952707.673265062 Hz/V
+q = 4298775881.860774 +/- 99780336.061293 Hz
+quadratic coeffs (a * x^2 + b* x + c)
+a = 10438379.66968224 +/- 840615.0181374766 Hz/V^2
+b = 580756498.8547741 +/- 5593345.134969783 Hz/V
+c = 4209921680.140303 +/- 15570025.516358195 Hz
+Without assuming confocality
+linear coeffs (m * x + q)
+m = 517703897.7238564 Hz/V
+q = 4345765459.708022 Hz
+quadratic coeffs (a * x^2 + b* x + c)
+a = 10433296.020970816 Hz/V^2
+b = 578784852.2758183 Hz/V
+c = 4201489267.607429 Hz
+
+file: scope_16
+Assuming confocality
+linear coeffs (m * x + q)
+m = 532209464.00517035 +/- 19042904.887967225 Hz/V
+q = 4077126220.5851674 +/- 84997272.79673973 Hz
+quadratic coeffs (a * x^2 + b* x + c)
+a = 9702888.45510919 +/- 742476.3718208994 Hz/V^2
+b = 577455981.351354 +/- 4275987.031881259 Hz/V
+c = 3975393899.0006776 +/- 13639711.884757424 Hz
+Without assuming confocality
+linear coeffs (m * x + q)
+m = 529055930.98994803 Hz/V
+q = 4123428774.4124646 Hz
+quadratic coeffs (a * x^2 + b* x + c)
+a = 9542897.08966819 Hz/V^2
+b = 574983275.4471791 Hz/V
+c = 3974047691.2840247 Hz
+
+file: scope_17
+Assuming confocality
+linear coeffs (m * x + q)
+m = 533935020.5896081 +/- 19551841.569877643 Hz/V
+q = 3914421681.8081374 +/- 84445990.72958338 Hz
+quadratic coeffs (a * x^2 + b* x + c)
+a = 10095403.624664914 +/- 574793.9138571132 Hz/V^2
+b = 574868945.7692608 +/- 3020851.6007784363 Hz/V
+c = 3796201147.400925 +/- 10686980.92112819 Hz
+Without assuming confocality
+linear coeffs (m * x + q)
+m = 531545335.30530715 Hz/V
+q = 3957904990.8033605 Hz
+quadratic coeffs (a * x^2 + b* x + c)
+a = 10426425.467227383 Hz/V^2
+b = 575453994.0031854 Hz/V
+c = 3782624098.4186735 Hz
+
+file: scope_18
+Assuming confocality
+linear coeffs (m * x + q)
+m = 546902610.8320969 +/- 18436251.04553675 Hz/V
+q = 3649478573.3211966 +/- 74670660.7323754 Hz
+quadratic coeffs (a * x^2 + b* x + c)
+a = 9728962.743312502 +/- 490899.14993338246 Hz/V^2
+b = 575517623.8720145 +/- 2160464.572055744 Hz/V
+c = 3523864818.365074 +/- 9085320.638057891 Hz
+Without assuming confocality
+linear coeffs (m * x + q)
+m = 544577705.8705058 Hz/V
+q = 3699007835.4463897 Hz
+quadratic coeffs (a * x^2 + b* x + c)
+a = 9463640.173484266 Hz/V^2
+b = 573755772.6188327 Hz/V
+c = 3529969072.2017365 Hz
+
+file: scope_19
+Assuming confocality
+linear coeffs (m * x + q)
+m = 546743105.4193726 +/- 17229013.767944213 Hz/V
+q = 3603809289.0683165 +/- 69406889.21233101 Hz
+quadratic coeffs (a * x^2 + b* x + c)
+a = 8990313.99732228 +/- 916345.2776687843 Hz/V^2
+b = 571327494.5274321 +/- 3916900.79710637 Hz/V
+c = 3485058360.4782424 +/- 17134325.850053366 Hz
+Without assuming confocality
+linear coeffs (m * x + q)
+m = 543742192.5773224 Hz/V
+q = 3640713797.3662505 Hz
+quadratic coeffs (a * x^2 + b* x + c)
+a = 9237585.68150706 Hz/V^2
+b = 570190743.706979 Hz/V
+c = 3472118512.4849706 Hz
+
+file: scope_20
+Assuming confocality
+linear coeffs (m * x + q)
+m = 559673476.903173 +/- 17112147.47015407 Hz/V
+q = 3229657534.144601 +/- 65148623.83909206 Hz
+quadratic coeffs (a * x^2 + b* x + c)
+a = 9261296.321855577 +/- 639528.6117146021 Hz/V^2
+b = 571913594.3016137 +/- 2205402.9828374498 Hz/V
+c = 3100442857.32354 +/- 11821974.10391493 Hz
+Without assuming confocality
+linear coeffs (m * x + q)
+m = 557801984.6599436 Hz/V
+q = 3266834107.947229 Hz
+quadratic coeffs (a * x^2 + b* x + c)
+a = 9681938.056313522 Hz/V^2
+b = 571826315.2679961 Hz/V
+c = 3085149131.934572 Hz
+
+file: scope_21
+Assuming confocality
+linear coeffs (m * x + q)
+m = 519637436.69834846 +/- 19998231.167517643 Hz/V
+q = 3433781583.677727 +/- 83151230.00964433 Hz
+quadratic coeffs (a * x^2 + b* x + c)
+a = 9991588.54033642 +/- 741200.3660492965 Hz/V^2
+b = 543096276.1035895 +/- 3091764.858003214 Hz/V
+c = 3280626157.7150416 +/- 15555891.891754817 Hz
+Without assuming confocality
+linear coeffs (m * x + q)
+m = 516643766.72600466 Hz/V
+q = 3480715366.689557 Hz
+quadratic coeffs (a * x^2 + b* x + c)
+a = 10309029.58048352 Hz/V^2
+b = 542548969.192659 Hz/V
+c = 3265150782.857441 Hz
+
+file: scope_22
+Assuming confocality
+linear coeffs (m * x + q)
+m = 520238092.97908205 +/- 22775571.181256223 Hz/V
+q = 3197692103.9253473 +/- 93007273.92302768 Hz
+quadratic coeffs (a * x^2 + b* x + c)
+a = 11415558.614825238 +/- 514842.03253507894 Hz/V^2
+b = 537731771.0492378 +/- 1942918.371315996 Hz/V
+c = 3013972415.2086024 +/- 11010213.376713851 Hz
+Without assuming confocality
+linear coeffs (m * x + q)
+m = 517166066.8133471 Hz/V
+q = 3264870145.4015718 Hz
+quadratic coeffs (a * x^2 + b* x + c)
+a = 11075484.11365147 Hz/V^2
+b = 536210163.631807 Hz/V
+c = 3024470939.157537 Hz
+
+file: scope_23
+Assuming confocality
+linear coeffs (m * x + q)
+m = 529372539.52873 +/- 19540411.52372264 Hz/V
+q = 2965820450.1260443 +/- 78153665.77995044 Hz
+quadratic coeffs (a * x^2 + b* x + c)
+a = 9870966.201912383 +/- 852502.2434585682 Hz/V^2
+b = 534385962.8358879 +/- 2933577.007978609 Hz/V
+c = 2807593542.2433352 +/- 17927765.53544428 Hz
+Without assuming confocality
+linear coeffs (m * x + q)
+m = 526093655.04504013 Hz/V
+q = 3024315247.426682 Hz
+quadratic coeffs (a * x^2 + b* x + c)
+a = 9443642.336176053 Hz/V^2
+b = 532343923.09771025 Hz/V
+c = 2820550778.5957723 Hz
+
+file: scope_24
+Assuming confocality
+linear coeffs (m * x + q)
+m = 531729626.9643083 +/- 19128863.32460902 Hz/V
+q = 2889576607.6542993 +/- 76269865.16346666 Hz
+quadratic coeffs (a * x^2 + b* x + c)
+a = 9825087.553510845 +/- 497614.39969209005 Hz/V^2
+b = 533752249.8498166 +/- 1676899.3789538478 Hz/V
+c = 2732962676.8819146 +/- 10366027.30086377 Hz
+Without assuming confocality
+linear coeffs (m * x + q)
+m = 529613820.7067564 Hz/V
+q = 2948221393.6241865 Hz
+quadratic coeffs (a * x^2 + b* x + c)
+a = 9433388.764598656 Hz/V^2
+b = 533032246.5009092 Hz/V
+c = 2746667076.352043 Hz
+
+file: scope_25
+Assuming confocality
+linear coeffs (m * x + q)
+m = 535344349.9406599 +/- 20626785.766116086 Hz/V
+q = 2829564522.916458 +/- 81816906.7779519 Hz
+quadratic coeffs (a * x^2 + b* x + c)
+a = 10552613.128071308 +/- 906611.2134708588 Hz/V^2
+b = 535568686.1779015 +/- 3047051.5016224943 Hz/V
+c = 2663464460.7850275 +/- 18700555.308470827 Hz
+Without assuming confocality
+linear coeffs (m * x + q)
+m = 531735061.8249546 Hz/V
+q = 2882373512.0744786 Hz
+quadratic coeffs (a * x^2 + b* x + c)
+a = 10692921.344951151 Hz/V^2
+b = 533645003.3278675 Hz/V
+c = 2655446385.3899646 Hz
+
