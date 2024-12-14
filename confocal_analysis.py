@@ -3,7 +3,6 @@ import functions as fn
 import fit_peaks as fp
 import numpy as np
 import os
-import functions2 as fn2
 
 R = 0.05  # m, mirror radius of curvature
 c = 3e8  # speed of light
