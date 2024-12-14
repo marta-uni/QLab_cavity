@@ -204,3 +204,33 @@ def plot_piezo_laser_fit(piezo_fitted, volt_laser, file_name, A, x0, gamma, xpea
         plt.close()
     else:
         plt.show()
+
+
+def plot_freq_laser_fit(piezo_fitted, volt_laser, file_name, A, x0, gamma, xpeaks, ypeaks, width, save=False):
+    fitted_curves = []
+    for A_, x0_, gamma_, peak, w in zip(A, x0, gamma, xpeaks, width):
+        x = np.linspace(peak - w * 1.2, peak + w * 1.2, 100)
+        y = lorentzian(x, A_, x0_, gamma_)
+        fitted_curves.append((x, y))
+
+    cmap = cm.get_cmap('Oranges')
+    colors = cmap(np.linspace(0.5, 0.9, len(fitted_curves)))
+
+    plt.figure(figsize=(12, 6))
+    plt.plot(piezo_fitted, volt_laser, label='Laser Intensity vs. Frequency',
+             color='green', marker='.', linestyle=None)
+    plt.scatter(xpeaks, ypeaks, marker='x', label='Peak Values')
+    for i, (x, y) in enumerate(fitted_curves):
+        plt.plot(x, y, '--', label=f'Fitted Lorentzian {i+1}', color=colors[i])
+    plt.xlabel('Frequency (Hz)')
+    plt.ylabel('Laser Intensity (V)')
+    plt.title('Frequency vs Laser Voltage')
+    plt.legend()
+    plt.grid()
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    if save:
+        plt.savefig(file_name)
+        plt.close()
+    else:
+        plt.show()
