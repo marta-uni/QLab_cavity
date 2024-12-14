@@ -61,7 +61,7 @@ for file_path in file_paths:
     data = {
         'timestamp': timestamps,
         'volt_laser': volt_laser,
-        'volt_piezo': volt_piezo,
+        'volt_piezo': piezo_fitted,
         'piezo_fitted': piezo_fitted
     }
     df = pd.DataFrame(data)

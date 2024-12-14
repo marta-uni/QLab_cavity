@@ -1,6 +1,8 @@
 import numpy as np
 from scipy.signal import find_peaks, peak_widths
 import matplotlib.pyplot as plt
+from matplotlib import cm
+from fit_peaks import lorentzian
 
 
 def crop_to_min_max(piezo_voltage, *readings):
@@ -112,7 +114,7 @@ def lin_quad_fits(x, y):
     '''
     Performs linear and quadratic fits and returns coefficients and errors.
     '''
-    if (len(x)>3):
+    if (len(x) > 3):
         # Perform linear fit
         # coeffs = [a, b] for y = ax + b
         coeffs_1, V1 = np.polyfit(x, y, 1, cov=True)
@@ -125,13 +127,13 @@ def lin_quad_fits(x, y):
     else:
         coeffs_1 = np.polyfit(x, y, 1)
         coeffs_2 = np.polyfit(x, y, 2)
-        return coeffs_1, coeffs_2, [0,0], [0,0,0]
+        return coeffs_1, coeffs_2, [0, 0], [0, 0, 0]
 
 
 def plot_fits(x, y, x_label, y_label, file_name, title=None, save=False):
     '''
     After performing linear and quadratic fits plots data and fit curves.
-    
+
     Returns coefficients and errors for both fits.
     '''
     coeffs_1, coeffs_2, d_coeffs_1, d_coeffs_2 = lin_quad_fits(x, y)
@@ -172,3 +174,33 @@ def plot_fits(x, y, x_label, y_label, file_name, title=None, save=False):
     else:
         plt.show()
     return coeffs_1, coeffs_2, d_coeffs_1, d_coeffs_2
+
+
+def plot_piezo_laser_fit(piezo_fitted, volt_laser, file_name, A, x0, gamma, xpeaks, ypeaks, width, save=False):
+    fitted_curves = []
+    for A_, x0_, gamma_, peak, w in zip(A, x0, gamma, xpeaks, width):
+        x = np.linspace(peak - w * 1.2, peak + w * 1.2, 100)
+        y = lorentzian(x, A_, x0_, gamma_)
+        fitted_curves.append((x, y))
+
+    cmap = cm.get_cmap('Oranges')
+    colors = cmap(np.linspace(0.5, 0.9, len(fitted_curves)))
+
+    plt.figure(figsize=(12, 6))
+    plt.scatter(piezo_fitted, volt_laser, label='Laser Intensity vs. Piezo volt',
+                color='green', marker='.')
+    plt.scatter(xpeaks, ypeaks, marker='x', label='Peak Values')
+    for i, (x, y) in enumerate(fitted_curves):
+        plt.plot(x, y, '--', label=f'Fitted Lorentzian {i+1}', color=colors[i])
+    plt.xlabel('Voltage Piezo (V)')
+    plt.ylabel('Laser Intensity (V)')
+    plt.title('Piezo Voltage vs Laser Voltage')
+    plt.legend()
+    plt.grid()
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    if save:
+        plt.savefig(file_name)
+        plt.close()
+    else:
+        plt.show()

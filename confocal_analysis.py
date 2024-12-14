@@ -15,11 +15,9 @@ fsr_freq = c/(2*l)  # (expected) fsr
 titles = ['scope_' + str(i) for i in range(15, 26)]
 paths = [f'data_confocal/clean_data/{t}.csv' for t in titles]
 os.makedirs(f"data_confocal/figures/calibration", exist_ok=True)
-os.makedirs(f"data_confocal/figures/simple_plots_piezo", exist_ok=True)
 
 #####################################################################################################
 
-# just use data6 folder
 with open('data_confocal/output.txt', 'a') as file:
     for path, title in zip(paths, titles):
         print(f'file: {title}', file=file)
@@ -95,9 +93,8 @@ with open('data_confocal/output.txt', 'a') as file:
         calibrated_freqs = coeffs2[0] * volt_piezo ** 2 + \
             coeffs2[1] * volt_piezo + coeffs2[2]
 
-        fn.scattering(x=volt_piezo, y=volt_laser, x_label='Volt_piezo (V)', y_label='Laser Intensity (V)',
-                      title='Laser Intensity',
-                      file_name=f'data_confocal/figures/simple_plots_piezo/{title}.png', save=True)
+        fn.plot_piezo_laser_fit(volt_piezo, volt_laser, file_name=f'data_confocal/figures/calibration/piezo_peaks_{title}.png', A=A_list,
+                         x0=x0_list, gamma=gamma_list, xpeaks=xpeaks, ypeaks=ypeaks, width=peak_widths, save=True)
 
         fn.scattering(x=calibrated_freqs, y=volt_laser, x_label='Relative frequency values (GHz)', y_label='Laser Intensity (V)',
                       title='Laser Intensity (calibrated): assuming confocality',
