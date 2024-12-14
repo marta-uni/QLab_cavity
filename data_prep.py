@@ -8,11 +8,16 @@ import matplotlib.pyplot as plt
 removes NaNs and fits the piezo data linearly. It then saves a csv file with  4 columns: timestamps,
 volt_laser, volt_piezo, piezo_fitted.'''
 
+#####################################################################################################
+# section with file specific values
+
 # Define the folder and file paths
 folder_name = 'data_confocal'
 file_paths = [f"{folder_name}/raw/scope_{i}.csv" for i in range(15, 26)]
 os.makedirs(f"{folder_name}/clean_data", exist_ok=True)
 os.makedirs(f"{folder_name}/figures/simple_plots_time", exist_ok=True)
+
+#####################################################################################################
 
 # Loop through each file in the file_paths
 for file_path in file_paths:
