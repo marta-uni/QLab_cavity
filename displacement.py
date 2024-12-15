@@ -4,8 +4,6 @@ import fit_peaks as fp
 import numpy as np
 import functions as fn
 
-import functions2 as fn2
-
 '''This code tries to estimate how accurate is our assumption of confocality. It does so computing the
 displacement of the odd modes (in MHz) from half the FSR (expected to be 0). Then it also computes the
 separation between the top odd peak and its closest neighbour (see plots).'''
