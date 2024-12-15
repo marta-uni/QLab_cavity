@@ -18,6 +18,9 @@ os.makedirs(f"data_non_confocal/figures/fsr", exist_ok=True)
 min_height = 0.01
 min_distance = 100
 
+# max voltage value of separation between close peaks
+max_sep_close_peaks = 0.8  # V
+
 #####################################################################################################
 
 '''read data'''
@@ -102,3 +105,31 @@ df_pk = pd.DataFrame(pk)
 pk_file_path = f"data_non_confocal/clean_data/{title}_peaks.csv"
 df_pk.to_csv(pk_file_path, index=False)
 print(f"Peaks saved to {pk_file_path}")
+
+'''average close peaks distance'''
+
+separations = fn.close_modes(x0_list, max_sep_close_peaks)
+
+close_peaks_volt = np.mean(separations)
+d_close_peaks_volt = np.std(separations)
+
+'''estimating cavity length'''
+
+L_cavity = R * (1 + np.sin(np.pi/2 * (close_peaks_volt/fsr_volt)))
+
+dL_dclose = np.cos(np.pi/2 * (close_peaks_volt/fsr_volt)) * R * np.pi / (2 * fsr_volt)
+dL_dFSR = - dL_dclose * close_peaks_volt / fsr_volt
+
+dL = np.sqrt((dL_dclose * d_close_peaks_volt)**2 + (dL_dFSR * d_fsr_volt)**2)
+
+print(f'L = {L_cavity*1000} +/- {dL*1000} mm')
+
+fsr_hz = c / (2 * L_cavity)
+dfsr_hz = fsr_hz * d_fsr_volt / fsr_volt
+
+print(f'FSR = {fsr_hz/1e9} +/- {dfsr_hz/1e9} GHz')
+
+with open('data_non_confocal/fsr.txt', 'w') as file:
+    file.write(f'FSR in volt: {fsr_volt} +/- {d_fsr_volt} V\n')
+    file.write(f'L = {L_cavity*1000} +/- {dL*1000} mm\n')
+    file.write(f'FSR = {fsr_hz/1e9} +/- {dfsr_hz/1e9} GHz\n')

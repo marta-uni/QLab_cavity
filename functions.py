@@ -234,3 +234,23 @@ def plot_freq_laser_fit(piezo_fitted, volt_laser, file_name, A, x0, gamma, xpeak
         plt.close()
     else:
         plt.show()
+
+
+def close_modes(x, expected_mode_distance):
+    '''
+    Returns a list of (voltage) separations between close peaks in our spectrum.
+    These will be separated by mode_distance / fsr = (2/pi) * arccos(1-L/R) - 1 .
+    The definition of "close" depends on expected_mode_distance (the upper bound
+    in voltage difference), which has to be expressed in V.
+    '''
+
+    result = []
+
+    # finding pairs of close adjacent peaks, these will be separated by
+    # mode_distance / fsr = (2/pi) * arccos(1-L/R) - 1
+    for i in range(len(x) - 1):
+        if ((x[i + 1] - x[i]) < expected_mode_distance):
+            result.append(x[i + 1] - x[i])
+
+    # average mode distance, in volts
+    return result
