@@ -14,6 +14,10 @@ title = 'calib00001'
 path = f'data_non_confocal/clean_data/{title}.csv'
 os.makedirs(f"data_non_confocal/figures/fsr", exist_ok=True)
 
+# find_peaks parameters
+min_height = 0.01
+min_distance = 100
+
 #####################################################################################################
 
 '''read data'''
@@ -27,10 +31,10 @@ volt_piezo = data['volt_piezo'].to_numpy()
 
 # find peaks and widths with just the find_peak function (only for plotting)
 xpeaks, ypeaks, peak_widths, indices = fn.peaks(
-    volt_piezo, transmission, 0.01, 100, True)
+    volt_piezo, transmission, min_height, min_distance, True)
 
 # find peaks and widths fitting lorentzians
-lor, cov = fp.fit_peaks(volt_piezo, transmission, 0.01, 100)
+lor, cov = fp.fit_peaks(volt_piezo, transmission, min_height, min_distance)
 
 x0_list = []
 A_list = []
@@ -58,14 +62,14 @@ fn.plot_piezo_laser_fit(volt_piezo, transmission, file_name=f'data_non_confocal/
                         x0=x0_list, gamma=gamma_list, xpeaks=xpeaks, ypeaks=ypeaks, width=peak_widths, save=True)
 
 # zoomed picture
-vp_z = volt_piezo[indices[4]-400:indices[4]+400]
-tr_z = transmission[indices[4]-400:indices[4]+400]
-a_z = A_list[3:6]
-x0_z = x0_list[3:6]
-g_z = gamma_list[3:6]
-x_z = xpeaks[3:6]
-y_z = ypeaks[3:6]
-w_z = peak_widths[3:6]
+vp_z = volt_piezo[indices[1]-400:indices[1]+400]
+tr_z = transmission[indices[1]-400:indices[1]+400]
+a_z = A_list[0:3]
+x0_z = x0_list[0:3]
+g_z = gamma_list[0:3]
+x_z = xpeaks[0:3]
+y_z = ypeaks[0:3]
+w_z = peak_widths[0:3]
 
 fn.plot_piezo_laser_fit(vp_z, tr_z, file_name=f'data_non_confocal/figures/fsr/piezo_peaks_closeup_{title}.png', A=a_z,
                         x0=x0_z, gamma=g_z, xpeaks=x_z, ypeaks=y_z, width=w_z, save=True)
