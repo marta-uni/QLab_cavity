@@ -4,7 +4,6 @@ import fit_peaks as fp
 import numpy as np
 import os
 
-R = 0.05  # m, mirror radius of curvature
 c = 3e8  # speed of light
 l = 50e-3  # cavity length (imposing)
 fsr_freq = c/(2*l)  # (expected) fsr
