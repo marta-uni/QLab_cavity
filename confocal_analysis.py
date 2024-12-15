@@ -28,7 +28,7 @@ with open('data_confocal/calib.txt', 'a') as file:
         volt_laser = data['volt_laser'].to_numpy()
         volt_piezo = data['volt_piezo'].to_numpy()
 
-        '''find free spectral range (in voltage units) and finesse from peaks'''
+        '''find free spectral range (in voltage units) from peaks'''
 
         # find peaks and widths with just the find_peak function (only for plotting)
         xpeaks, ypeaks, peak_widths, indices = fn.peaks(
