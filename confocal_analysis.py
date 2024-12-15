@@ -17,7 +17,7 @@ os.makedirs(f"data_confocal/figures/calibration", exist_ok=True)
 
 #####################################################################################################
 
-with open('data_confocal/calib.txt', 'a') as file:
+with open('data_confocal/calib.txt', 'w') as file:
     for path, title in zip(paths, titles):
         print(f'file: {title}', file=file)
 
