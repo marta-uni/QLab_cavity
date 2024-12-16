@@ -58,7 +58,7 @@ def fit_peaks(x, y, height, distance):
 
 
 def fit_peaks2(x, y, peaks, widths, ind_range):
-    '''Given x and y (a list of peaks and FWHMs) returns a list of lorentzian curves
+    '''Given x and y,a list of peaks, FWHMs and the number of points to use in the fit, returns a list of lorentzian curves
     (just the 3 parameters A, x0, gamma) and a list with the covariance matrices from the fit.'''
 
     x_spacing = np.mean(np.diff(x))
