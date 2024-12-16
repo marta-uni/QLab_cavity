@@ -1,5 +1,4 @@
 import pandas as pd
-from scipy.signal import find_peaks
 import fit_peaks as fp
 import numpy as np
 import functions as fn
