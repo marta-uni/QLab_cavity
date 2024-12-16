@@ -21,6 +21,8 @@ d_fsr_volt = 0.0001395265273752087
 
 os.makedirs(f"data_non_confocal/figures/finesse", exist_ok=True)
 
+ind_range = 400
+
 #####################################################################################################
 
 finesse_list = []
@@ -34,7 +36,8 @@ for title, h in zip(title_list, min_heights):
     print(title)
 
     xpeaks, ypeaks, peak_widths = fn.peaks(volt_piezo, volt_laser, h, 400)
-    lor, cov = fp.fit_peaks(volt_piezo, volt_laser, h, 400)
+    peak_widths = [max(pw, 0.001) for pw in peak_widths]
+    lor, cov = fp.fit_peaks2(volt_piezo, volt_laser, xpeaks, peak_widths, ind_range)
 
     x0_list = []
     A_list = []
@@ -51,12 +54,12 @@ for title, h in zip(title_list, min_heights):
     A_list = np.array(A_list)
     gamma_list = np.array(gamma_list)
     dgamma = np.array(dgamma)
-
-    fn.plot_piezo_laser_fit(volt_piezo, volt_laser, file_name=f'data_non_confocal/figures/finesse/piezo_peaks_{title}.png', A=A_list,
-                            x0=x0_list, gamma=gamma_list, xpeaks=xpeaks, ypeaks=ypeaks, width=peak_widths, save=True)
     
-    if (title == 'error00001') | (title == 'error00015'):
-        continue
+    for g, dg in zip(gamma_list, dgamma):
+        print(f'gamma = {g} +/- {dg}')
+
+    fp.plot_piezo_laser_fit2(volt_piezo, volt_laser, file_name=f'data_non_confocal/figures/finesse/piezo_peaks_{title}.png', A=A_list,
+                            x0=x0_list, gamma=gamma_list, xpeaks=xpeaks, ypeaks=ypeaks, ind_range=ind_range, save=True)
 
     fin = fsr_volt/(2*gamma_list)
     d_fin = fin * np.sqrt((d_fsr_volt / fsr_volt) **
