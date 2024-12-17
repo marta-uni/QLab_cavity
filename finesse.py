@@ -22,12 +22,17 @@ os.makedirs(f"data_non_confocal/figures/finesse", exist_ok=True)
 
 ind_range = 400
 
+write_file_name = "data_non_confocal/finesse_double_fit.txt"
+figure_name = 'piezo_peaks_double_fit'
+# order to change from double fit to single fit you have to modify these 2 titles
+# and use fit_peaks2 for single fit and fit_peaks3 for double fit
+
 #####################################################################################################
 
 finesse_list = []
 d_finesse_list = []
 
-with open("data_non_confocal/finesse_double_fit.txt", "w") as file:
+with open(write_file_name, "w") as file:
     for title, h in zip(title_list, min_heights):
         data = pd.read_csv(f'data_non_confocal/clean_data/{title}.csv')
         volt_piezo = data['volt_piezo'].to_numpy()
@@ -37,12 +42,8 @@ with open("data_non_confocal/finesse_double_fit.txt", "w") as file:
 
         xpeaks, ypeaks, peak_widths = fn.peaks(volt_piezo, volt_laser, h, 400)
         peak_widths = [max(pw, 0.001) for pw in peak_widths]
-        lor, cov = fp.fit_peaks2(
+        lor, cov = fp.fit_peaks3(
             volt_piezo, volt_laser, xpeaks, peak_widths, ind_range)
-
-        new_widths = [(2 * popt[2]) for popt in lor]
-
-        lor, cov = fp.fit_peaks3(volt_piezo, volt_laser, xpeaks, new_widths)
 
         x0_list = []
         A_list = []
@@ -71,7 +72,7 @@ with open("data_non_confocal/finesse_double_fit.txt", "w") as file:
             file.write(f'x0 = {x0_} +/- {dx0_} V\n')
             file.write(f'gamma = {g_} +/- {dg_} V\n')
 
-        fp.plot_piezo_laser_fit2(volt_piezo, volt_laser, file_name=f'data_non_confocal/figures/finesse/piezo_peaks_double_fit_{title}.png', A=A_list,
+        fp.plot_piezo_laser_fit2(volt_piezo, volt_laser, file_name=f'data_non_confocal/figures/finesse/{figure_name}_{title}.png', A=A_list,
                                  x0=x0_list, gamma=gamma_list, xpeaks=xpeaks, ypeaks=ypeaks, ind_range=ind_range, save=True)
 
         fin = fsr_volt/(2*gamma_list)
