@@ -58,7 +58,7 @@ def fit_peaks(x, y, height, distance):
 
 
 def fit_peaks2(x, y, peaks, widths, ind_range):
-    '''Given x and y,a list of peaks, FWHMs and the number of points to use in the fit, returns a list of lorentzian curves
+    '''Given x and y, a list of peaks, FWHMs and the number of points to use in the fit, returns a list of lorentzian curves
     (just the 3 parameters A, x0, gamma) and a list with the covariance matrices from the fit.'''
 
     x_spacing = np.mean(np.diff(x))
@@ -72,6 +72,52 @@ def fit_peaks2(x, y, peaks, widths, ind_range):
         # Determine a fitting range around the peak, e.g., ±1.2 * width
         start = max(0, peak_index - int(ind_range/2))
         end = min(len(x), peak_index + int(ind_range/2))
+
+        # Extract data around the peak
+        x_fit_range = x[start:end]
+        y_fit_range = y[start:end]
+
+        # Initial guess: A=height at peak, x0=peak position in x_fitted, gamma=half-width at half-maximum
+        initial_guess = [y[peak_index], x[peak_index], width / 2]
+
+        # Define bounds for A, x0, and gamma
+        bounds = (
+            # Lower bounds for [A, x0, gamma]
+            [0, x[peak_index] - width, 0],
+            # Upper bounds for [A, x0, gamma]
+            [np.inf, x[peak_index] + width, width * 2]
+        )
+
+        try:
+            popt, pcov = curve_fit(lorentzian, x_fit_range, y_fit_range,
+                                   p0=initial_guess, bounds=bounds, maxfev=10000)
+            params.append(popt)
+            covs.append(pcov)
+        except RuntimeError as e:
+            print(
+                f"Failed to fit peak at piezo_fitted = {x[peak_index]:.2f} due to RuntimeError: {e}")
+        except Exception as e:
+            print(
+                f"An unexpected error occurred while fitting peak at piezo_fitted = {x[peak_index]:.2f}: {e}")
+
+    return params, covs
+
+
+def fit_peaks3(x, y, peaks, widths):
+    '''Given x and y, a list of peaks and FWHMs, returns a list of lorentzian curves
+    (just the 3 parameters A, x0, gamma) and a list with the covariance matrices from the fit.'''
+
+    x_spacing = np.mean(np.diff(x))
+
+    indices = [np.flatnonzero(x == pk)[0] for pk in peaks if pk in x]
+
+    # Loop through each peak and fit
+    params = []
+    covs = []
+    for peak_index, width in zip(indices, widths):
+        # Determine a fitting range around the peak, e.g., ±1.2 * width
+        start = max(0, peak_index - int(width / (x_spacing * 2)))
+        end = min(len(x), peak_index + int(width / (x_spacing * 2)))
 
         # Extract data around the peak
         x_fit_range = x[start:end]
