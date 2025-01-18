@@ -74,20 +74,20 @@ piezo_fitted = fn.fit_piezo_line(timestamps, volt_piezo)
 
 # Plotting, just for fun
 plt.figure()
-plt.plot(timestamps, transmission, label='Transmission',
-         color='blue', markersize=5, marker='.')
-plt.plot(timestamps, piezo_fitted, label='Piezo voltage',
-         color='red', markersize=5, marker='.')
-plt.plot(timestamps, total_intensity, label='Total intensity',
-         color='green', markersize=5, marker='.')
-plt.plot(timestamps, reflection, label='Reflection',
-         color='purple', markersize=5, marker='.')
+plt.scatter(timestamps, transmission, label='Transmission',
+         color='blue', s=5, marker='.')
+plt.scatter(timestamps, piezo_fitted, label='Piezo voltage',
+         color='red', s=5, marker='.')
+plt.scatter(timestamps, total_intensity, label='Total intensity',
+         color='green', s=5, marker='.')
+plt.scatter(timestamps, reflection, label='Reflection',
+         color='purple', s=5, marker='.')
 plt.xlabel('Timestamp [s]')
 plt.ylabel('Channel Value [V]')
 plt.title('Timestamp vs Channel Data')
 plt.grid()
 plt.legend()
-plt.savefig(f'{folder_name}/figures/simple_plots_time/{title}.pdf')
+plt.savefig(f'{folder_name}/figures/simple_plots_time/{title}.png')
 plt.show()
 
 # Saving data in clean_data folder
