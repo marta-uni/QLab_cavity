@@ -12,8 +12,8 @@ transmission, volt_piezo, piezo_fitted.'''
 # section with file specific values
 
 # Define the folder and file paths
-folder_name = 'data_non_confocal'
-title = 'error00019'
+folder_name = 'data_imp_match'
+title = 'imp_match00000'
 df = pd.DataFrame()
 # Import single channel files
 channel_files = [f'{folder_name}/raw/C{i}{title}.csv' for i in range(1, 5)]
@@ -76,11 +76,11 @@ piezo_fitted = fn.fit_piezo_line(timestamps, volt_piezo)
 plt.figure()
 plt.plot(timestamps, transmission, label='Transmission',
          color='blue', markersize=5, marker='.')
-plt.plot(timestamps, piezo_fitted/10, label='Piezo voltage/10',
+plt.plot(timestamps, piezo_fitted, label='Piezo voltage',
          color='red', markersize=5, marker='.')
 plt.plot(timestamps, total_intensity, label='Total intensity',
          color='green', markersize=5, marker='.')
-plt.plot(timestamps, reflection+1, label='Reflection+1V',
+plt.plot(timestamps, reflection, label='Reflection',
          color='purple', markersize=5, marker='.')
 plt.xlabel('Timestamp [s]')
 plt.ylabel('Channel Value [V]')
