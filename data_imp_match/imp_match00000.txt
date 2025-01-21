@@ -1,0 +1,1 @@
+Without removing any peakSum of depths = 0.7071740000000002 VConsider clear even and odd modesSum of depths = 0.630376 VConsider only even modesSum of depths = 0.518381 V

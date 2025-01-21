@@ -13,7 +13,7 @@ transmission, volt_piezo, piezo_fitted.'''
 
 # Define the folder and file paths
 folder_name = 'data_imp_match'
-title = 'imp_match00000'
+title = 'bessel00000'
 df = pd.DataFrame()
 # Import single channel files
 channel_files = [f'{folder_name}/raw/C{i}{title}.csv' for i in range(1, 5)]

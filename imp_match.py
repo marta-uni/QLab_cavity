@@ -12,14 +12,23 @@ R = 50e-3  # curvature radius
 #####################################################################################################
 # section with file specific values
 
-title = 'imp_match00000'
+# if using the bessel file, sets all the correct parameters and removes unnecessary peaks the correct way
+bessel = False
+
+if bessel:
+    title = 'bessel00000'
+    # find_peaks parameters
+    min_prominence = 0.01
+    min_distance = 900
+else:
+    title = 'imp_match00000'
+    # find_peaks parameters
+    min_prominence = 0.035
+    min_distance = 200
+
 path = f'data_imp_match/clean_data/{title}.csv'
 figure_path = 'data_imp_match/figures/dips/'
 os.makedirs(figure_path, exist_ok=True)
-
-# find_peaks parameters
-min_prominence = 0.035
-min_distance = 200
 
 #####################################################################################################
 
@@ -34,6 +43,10 @@ volt_piezo = data['volt_piezo'].to_numpy()
 
 dips_indices = find_peaks(-reflection, distance=min_distance,
                           prominence=min_prominence)[0]
+
+if bessel:
+    dips_indices = np.delete(dips_indices, [-1])
+
 prominences_tuple = peak_prominences(-reflection, dips_indices)
 prominences = prominences_tuple[0]
 
@@ -63,23 +76,26 @@ piezo_pk = volt_piezo[dips_indices]
 refl_pk = reflection[dips_indices]
 
 
-'''compute prominence sum for 3 different cases'''
+'''compute prominence sum'''
 
-print('Without removing any peak')
-print(f'Sum of depths = {sum(prominences)} V')
+with open(f'data_imp_match/{title}.txt', 'w') as file:
+    if bessel:
+        file.write(f'Sum of depths = {sum(prominences)} V')
+    else:
+        file.write('Without removing any peak')
+        file.write(f'Sum of depths = {sum(prominences)} V')
 
-print('Consider clear even and odd modes')
-mask = (dips_indices < 7000)
-dips_indices = dips_indices[mask]
-prominences = prominences[mask]
-print(f'Sum of depths = {sum(prominences)} V')
+        file.write('Consider clear even and odd modes')
+        mask = (dips_indices < 7000)
+        dips_indices = dips_indices[mask]
+        prominences = prominences[mask]
+        file.write(f'Sum of depths = {sum(prominences)} V')
 
-print('Consider only even modes')
-mask = (dips_indices > 2000) & (dips_indices < 7000)
-dips_indices = dips_indices[mask]
-prominences = prominences[mask]
-print(f'Sum of depths = {sum(prominences)} V')
-
+        file.write('Consider only even modes')
+        mask = (dips_indices > 2000) & (dips_indices < 7000)
+        dips_indices = dips_indices[mask]
+        prominences = prominences[mask]
+        file.write(f'Sum of depths = {sum(prominences)} V')
 
 '''plot'''
 
