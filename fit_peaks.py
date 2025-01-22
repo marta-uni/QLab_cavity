@@ -248,7 +248,6 @@ def fit_peaks_airy(x, y, peaks, widths, ind_range):
             popt, pcov = curve_fit(airy_off, x_fit_range, y_fit_range,
                                    p0=initial_guess, bounds=bounds, maxfev=10000)
             params.append(popt)
-            print(popt)
             covs.append(pcov)
         except RuntimeError as e:
             print(
