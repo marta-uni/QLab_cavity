@@ -19,11 +19,12 @@ fsr_volt = 1.5596783075517309
 d_fsr_volt = 0.0001395265273752087
 
 os.makedirs(f"data_non_confocal/figures/finesse", exist_ok=True)
+os.makedirs(f"data_non_confocal/figures/finesse/residuals", exist_ok=True)
 
 ind_range = 200
 
 write_file_name = "data_non_confocal/finesse_leonardi.txt"
-figure_name = 'piezo_peaks_leonardi'
+figure_name = 'peaks_leonardi'
 # order to change from double fit to single fit you have to modify these 2 titles
 # and use fit_peaks2 for single fit and fit_peaks3 for double fit
 
@@ -54,7 +55,10 @@ with open(write_file_name, "w") as file:
         dgamma = []
         doff = []
 
-        for popt, pcov in zip(lor, cov):
+        indices = [np.flatnonzero(volt_piezo == pk)[0]
+                   for pk in xpeaks if pk in volt_piezo]
+
+        for popt, pcov, i in zip(lor, cov, indices):
             A_list.append(popt[0])
             x0_list.append(popt[1])
             gamma_list.append(popt[2])
@@ -63,6 +67,8 @@ with open(write_file_name, "w") as file:
             dx0.append(np.sqrt(pcov[1, 1]))
             dgamma.append(np.sqrt(pcov[2, 2]))
             doff.append(np.sqrt(pcov[3, 3]))
+            fn.fit_residuals(fp.lorentzian_off, volt_piezo[i-ind_range//2:i+ind_range//2], volt_laser[i-ind_range//2:i+ind_range//2], popt, 'Volt piezo [V]',
+                             'Laser intensity [V]', f'Residuals for peak in {volt_piezo[i]:.3g} V', f'data_non_confocal/figures/finesse/residuals/{figure_name}_{title}_{volt_piezo[i]:.3g}.png', True)
 
         x0_list = np.array(x0_list)
         A_list = np.array(A_list)
@@ -80,7 +86,7 @@ with open(write_file_name, "w") as file:
             file.write(f'off = {o_} +/- {do_} V\n')
 
         fp.plot_piezo_laser_fit_leonardi(volt_piezo, volt_laser, file_name=f'data_non_confocal/figures/finesse/{figure_name}_{title}.png', A=A_list,
-                                 x0=x0_list, gamma=gamma_list, off=off_list, xpeaks=xpeaks, ypeaks=ypeaks, ind_range=ind_range, save=True)
+                                         x0=x0_list, gamma=gamma_list, off=off_list, xpeaks=xpeaks, ypeaks=ypeaks, ind_range=ind_range, save=True)
 
         fin = fsr_volt/(2*gamma_list)
         d_fin = fin * np.sqrt((d_fsr_volt / fsr_volt) **

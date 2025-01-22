@@ -254,3 +254,8 @@ def close_modes(x, expected_mode_distance):
 
     # average mode distance, in volts
     return result
+
+
+def fit_residuals(func, x, y, params, x_label, y_label, title, file_name, save):
+    res = y - func(x, *params)
+    scattering(x, res, x_label, y_label, title, file_name, save)
