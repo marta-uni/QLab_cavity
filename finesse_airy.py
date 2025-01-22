@@ -22,10 +22,8 @@ os.makedirs(f"data_non_confocal/figures/finesse", exist_ok=True)
 
 ind_range = 200
 
-write_file_name = "data_non_confocal/finesse_leonardi.txt"
-figure_name = 'piezo_peaks_leonardi'
-# order to change from double fit to single fit you have to modify these 2 titles
-# and use fit_peaks2 for single fit and fit_peaks3 for double fit
+write_file_name = "data_non_confocal/finesse_airy.txt"
+figure_name = 'piezo_peaks_airy'
 
 #####################################################################################################
 
@@ -42,36 +40,39 @@ with open(write_file_name, "w") as file:
 
         xpeaks, ypeaks, peak_widths = fn.peaks(volt_piezo, volt_laser, h, 400)
         peak_widths = [max(pw, 0.001) for pw in peak_widths]
-        lor, cov = fp.fit_peaks_leonardi(
+        lor, cov = fp.fit_peaks_airy(
             volt_piezo, volt_laser, xpeaks, peak_widths, ind_range)
 
         x0_list = []
         A_list = []
-        gamma_list = []
+        s_list = []
         off_list = []
         dA = []
         dx0 = []
-        dgamma = []
+        ds = []
         doff = []
 
         for popt, pcov in zip(lor, cov):
             A_list.append(popt[0])
             x0_list.append(popt[1])
-            gamma_list.append(popt[2])
+            s_list.append(popt[2])
             off_list.append(popt[3])
             dA.append(np.sqrt(pcov[0, 0]))
             dx0.append(np.sqrt(pcov[1, 1]))
-            dgamma.append(np.sqrt(pcov[2, 2]))
+            ds.append(np.sqrt(pcov[2, 2]))
             doff.append(np.sqrt(pcov[3, 3]))
 
         x0_list = np.array(x0_list)
         A_list = np.array(A_list)
-        gamma_list = np.array(gamma_list)
+        s_list = np.array(s_list)
         off_list = np.array(off_list)
         dA = np.array(dA)
         dx0 = np.array(dx0)
-        dgamma = np.array(dgamma)
+        ds = np.array(ds)
         doff = np.array(doff)
+        
+        gamma_list = 1.16133995 / s_list
+        dgamma = gamma_list * ds/s_list
 
         for a_, da_, x0_, dx0_, g_, dg_, o_, do_ in zip(A_list, dA, x0_list, dx0, gamma_list, dgamma, off_list, doff):
             file.write(f'A = {a_} +/- {da_} V\n')
@@ -79,8 +80,8 @@ with open(write_file_name, "w") as file:
             file.write(f'gamma = {g_} +/- {dg_} V\n')
             file.write(f'off = {o_} +/- {do_} V\n')
 
-        fp.plot_piezo_laser_fit_leonardi(volt_piezo, volt_laser, file_name=f'data_non_confocal/figures/finesse/{figure_name}_{title}.png', A=A_list,
-                                 x0=x0_list, gamma=gamma_list, off=off_list, xpeaks=xpeaks, ypeaks=ypeaks, ind_range=ind_range, save=True)
+        fp.plot_piezo_laser_fit_airy(volt_piezo, volt_laser, file_name=f'data_non_confocal/figures/finesse/{figure_name}_{title}.png', A=A_list,
+                                 x0=x0_list, s=s_list, off=off_list, xpeaks=xpeaks, ypeaks=ypeaks, ind_range=ind_range, save=True)
 
         fin = fsr_volt/(2*gamma_list)
         d_fin = fin * np.sqrt((d_fsr_volt / fsr_volt) **
