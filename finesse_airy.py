@@ -9,8 +9,9 @@ import os
 
 title_list = [f'error{str(i).zfill(5)}' for i in range(1, 19)]
 # excluding files with "throw out note" (8 to 10), files with unclear sidebands (5 to 7 and 16),
-# and files i don't understand (0, 18)
-title_list = title_list[:4] + title_list[10:15]  # + [title_list[16]]
+# and files i don't understand (0, 18), files 3 and 4 aren't considered because of a threshold we put at 40 MHz
+# i don't know about 17
+title_list = title_list[:2] + title_list[10:15]
 # after changing the current the peak threshold got higher
 min_heights = [0.02, 0.02, 0.02, 0.02,
                0.045, 0.045, 0.045, 0.045, 0.045]
