@@ -3,7 +3,8 @@ from matplotlib import cm
 from scipy.signal import find_peaks, peak_widths
 import numpy as np
 from scipy.optimize import curve_fit
-from scipy.special import jv
+
+fsr_volt = 1.5596783075517309
 
 
 def lorentzian(x, A, x0, gamma):
@@ -14,11 +15,8 @@ def lorentzian_off(x, A, x0, gamma, off):
     return A / (1 + ((x - x0) / gamma) ** 2) + off
 
 
-def airy_off(x, A, x0, s, off):
-    return A * (2 * jv(1, s*(x-x0)) / (s*(x-x0)))**2 + off
-
-def airy_off(x, A, x0, s, off):
-    return A * (2 * jv(1, s*(x-x0)) / (s*(x-x0)))**2 + off
+def airy_off(x, A, x0, R, off):
+    return A / (1 + (4 * R / (1 - R)**2) * (np.sin((x - x0) * np.pi / fsr_volt))**2) + off
 
 
 def fit_peaks(x, y, height, distance):
@@ -233,15 +231,14 @@ def fit_peaks_airy(x, y, peaks, widths, ind_range):
         x_fit_range = x[start:end]
         y_fit_range = y[start:end]
 
-        # Initial guess: A=height at peak, x0=peak position in x_fitted, s=1, off=0
+        # Initial guess: A=height at peak, x0=peak position in x_fitted, R=1off=0
         initial_guess = [y[peak_index], x[peak_index]+1e-9, 1, 0]
 
-        # Define bounds for A, x0, and gamma
         bounds = (
-            # Lower bounds for [A, x0, s, off]
+            # Lower bounds for [A, x0, R, off]
             [0, x[peak_index] - 2.5 * width, 0, -0.01],
-            # Upper bounds for [A, x0, s, off]
-            [np.inf, x[peak_index] + 2.5 * width, np.inf, 0.01]
+            # Upper bounds for [A, x0, R, off]
+            [np.inf, x[peak_index] + 2.5 * width, 1, 0.01]
         )
 
         try:
@@ -323,13 +320,13 @@ def plot_piezo_laser_fit_leonardi(piezo_fitted, volt_laser, file_name, A, x0, ga
         plt.show()
 
 
-def plot_piezo_laser_fit_airy(piezo_fitted, volt_laser, file_name, A, x0, s, off, xpeaks, ypeaks, ind_range, save=False):
+def plot_piezo_laser_fit_airy(piezo_fitted, volt_laser, file_name, A, x0, R, off, xpeaks, ypeaks, ind_range, save=False):
     fitted_curves = []
     piezo_spacing = np.mean(np.diff(piezo_fitted))
-    for A_, x0_, s_, off_, peak in zip(A, x0, s, off, xpeaks):
+    for A_, x0_, R_,off_, peak in zip(A, x0, R,off, xpeaks):
         x = np.linspace(peak - ind_range * piezo_spacing/2,
                         peak + ind_range * piezo_spacing/2, 100)
-        y = airy_off(x, A_, x0_, s_, off_)
+        y = airy_off(x, A_, x0_, R_, off_)
         fitted_curves.append((x, y))
 
     cmap = cm.get_cmap('Oranges')

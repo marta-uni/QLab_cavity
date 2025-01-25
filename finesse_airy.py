@@ -47,11 +47,11 @@ with open(write_file_name, "w") as file:
 
         x0_list = []
         A_list = []
-        s_list = []
+        R_list = []
         off_list = []
         dA = []
         dx0 = []
-        ds = []
+        dR = []
         doff = []
 
         indices = [np.flatnonzero(volt_piezo == pk)[0]
@@ -60,35 +60,36 @@ with open(write_file_name, "w") as file:
         for popt, pcov, i in zip(lor, cov, indices):
             A_list.append(popt[0])
             x0_list.append(popt[1])
-            s_list.append(popt[2])
+            R_list.append(popt[2])
             off_list.append(popt[3])
             dA.append(np.sqrt(pcov[0, 0]))
             dx0.append(np.sqrt(pcov[1, 1]))
-            ds.append(np.sqrt(pcov[2, 2]))
+            dR.append(np.sqrt(pcov[2,2]))
             doff.append(np.sqrt(pcov[3, 3]))
             fn.fit_residuals(fp.airy_off, volt_piezo[i-ind_range//2:i+ind_range//2], volt_laser[i-ind_range//2:i+ind_range//2], popt, 'Volt piezo [V]',
                              'Laser intensity [V]', f'Residuals for peak in {volt_piezo[i]:.3g} V', f'data_non_confocal/figures/finesse/residuals/{figure_name}_{title}_{volt_piezo[i]:.3g}.png', True)
 
         x0_list = np.array(x0_list)
         A_list = np.array(A_list)
-        s_list = np.array(s_list)
+        R_list = np.array(R_list)
         off_list = np.array(off_list)
         dA = np.array(dA)
         dx0 = np.array(dx0)
-        ds = np.array(ds)
+        dR = np.array(dR)
         doff = np.array(doff)
 
-        gamma_list = 1.16133995 / s_list
-        dgamma = gamma_list * ds/s_list
+        gamma_list = fsr_volt / np.pi * np.arcsin((1-R_list)/2/np.sqrt(R_list)) 
+        dgamma = gamma_list * d_fsr_volt/fsr_volt
 
-        for a_, da_, x0_, dx0_, g_, dg_, o_, do_ in zip(A_list, dA, x0_list, dx0, gamma_list, dgamma, off_list, doff):
+        for a_, da_, x0_, dx0_, g_, dg_, o_, do_, R_, dR_ in zip(A_list, dA, x0_list, dx0, gamma_list, dgamma, off_list, doff, R_list, dR):
             file.write(f'A = {a_} +/- {da_} V\n')
             file.write(f'x0 = {x0_} +/- {dx0_} V\n')
             file.write(f'gamma = {g_} +/- {dg_} V\n')
-            file.write(f'off = {o_} +/- {do_} V\n')
+            file.write(f'R = {R_} +/- {dR_} V\n')
+            file.write(f'off = {o_} +/- {do_} V\n\n')
 
         fp.plot_piezo_laser_fit_airy(volt_piezo, volt_laser, file_name=f'data_non_confocal/figures/finesse/{figure_name}_{title}.png', A=A_list,
-                                     x0=x0_list, s=s_list, off=off_list, xpeaks=xpeaks, ypeaks=ypeaks, ind_range=ind_range, save=True)
+                                     x0=x0_list, R=R_list, off=off_list, xpeaks=xpeaks, ypeaks=ypeaks, ind_range=ind_range, save=True)
 
         fin = fsr_volt/(2*gamma_list)
         d_fin = fin * np.sqrt((d_fsr_volt / fsr_volt) **
