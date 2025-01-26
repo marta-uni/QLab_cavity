@@ -83,7 +83,7 @@ with open(write_file_name, "w") as file:
             file.write(f'A = {a_} +/- {da_} V\n')
             file.write(f'x0 = {x0_} +/- {dx0_} V\n')
             file.write(f'gamma = {g_} +/- {dg_} V\n')
-            file.write(f'off = {o_} +/- {do_} V\n')
+            file.write(f'off = {o_} +/- {do_} V\n\n')
 
         fp.plot_piezo_laser_fit_leonardi(volt_piezo, volt_laser, file_name=f'data_non_confocal/figures/finesse/{figure_name}_{title}.png', A=A_list,
                                          x0=x0_list, gamma=gamma_list, off=off_list, xpeaks=xpeaks, ypeaks=ypeaks, ind_range=ind_range, save=True)
