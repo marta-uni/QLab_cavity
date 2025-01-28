@@ -99,7 +99,7 @@ for i, title in enumerate(title_list):
     if len(xpeaks) == 1:
         type_peaks = np.append(type_peaks, ['carrier'])
     elif len(xpeaks) == 2:
-        type_peaks = np.append(type_peaks, ['carrier', 'sb_1'])
+        type_peaks = np.append(type_peaks, ['sb_1', 'carrier'])
     elif len(xpeaks) == 3:
         type_peaks = np.append(type_peaks, ['sb_1', 'carrier', 'sb_1'])
     elif len(xpeaks) == 5:
