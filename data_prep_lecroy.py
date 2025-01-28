@@ -12,8 +12,8 @@ transmission, volt_piezo, piezo_fitted.'''
 # section with file specific values
 
 # Define the folder and file paths
-folder_name = 'data_imp_match'
-title = 'bessel00000'
+folder_name = 'data_bessel'
+title = 'bessel00021'
 df = pd.DataFrame()
 # Import single channel files
 channel_files = [f'{folder_name}/raw/C{i}{title}.csv' for i in range(1, 5)]
@@ -58,7 +58,7 @@ total_intensity = df['total_intensity'].to_numpy()
 
 # Extra cropping, use it in case of mode hopping
 if cropping:
-    mask = (timestamps >= -0.01)
+    mask = (timestamps >= -0.006)
     timestamps = timestamps[mask]
     transmission = transmission[mask]
     reflection = reflection[mask]
