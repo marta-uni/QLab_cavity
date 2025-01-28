@@ -288,7 +288,7 @@ def plot_piezo_laser_fit2(piezo_fitted, volt_laser, file_name, A, x0, gamma, xpe
         plt.show()
 
 
-def plot_piezo_laser_fit_leonardi(piezo_fitted, volt_laser, file_name, A, x0, gamma, off, xpeaks, ypeaks, ind_range, save=False):
+def plot_piezo_laser_fit_leonardi(piezo_fitted, volt_laser, file_name, A, x0, gamma, off, xpeaks, ypeaks, ind_range, save=False, log=False):
     fitted_curves = []
     piezo_spacing = np.mean(np.diff(piezo_fitted))
     for A_, x0_, gamma_, off_, peak in zip(A, x0, gamma, off, xpeaks):
@@ -308,9 +308,10 @@ def plot_piezo_laser_fit_leonardi(piezo_fitted, volt_laser, file_name, A, x0, ga
         plt.plot(x, y, '--', label=f'Fitted Lorentzian {i+1}', color=colors[i])
     plt.xlabel('Voltage Piezo (V)')
     plt.ylabel('Laser Intensity (V)')
-    plt.yscale('log')
+    if log:
+        plt.yscale('log')
     plt.title('Piezo Voltage vs Laser Voltage')
-    plt.legend()
+    #plt.legend()
     plt.grid()
     plt.xticks(rotation=45)
     plt.tight_layout()
