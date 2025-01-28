@@ -190,7 +190,7 @@ def fit_peaks_leonardi(x, y, peaks, widths, ind_range):
         # Initial guess: A=height at peak, x0=peak position in x_fitted, gamma=half-width at half-maximum
         initial_guess = [y[peak_index], x[peak_index], width / 2, 0]
 
-        # Define bounds for A, x0, and gamma
+        # Define bounds for A, x0, gamma and off
         bounds = (
             # Lower bounds for [A, x0, gamma, off]
             [0, x[peak_index] - 2.5 * width, 0, -np.inf],
@@ -308,6 +308,7 @@ def plot_piezo_laser_fit_leonardi(piezo_fitted, volt_laser, file_name, A, x0, ga
         plt.plot(x, y, '--', label=f'Fitted Lorentzian {i+1}', color=colors[i])
     plt.xlabel('Voltage Piezo (V)')
     plt.ylabel('Laser Intensity (V)')
+    plt.yscale('log')
     plt.title('Piezo Voltage vs Laser Voltage')
     plt.legend()
     plt.grid()

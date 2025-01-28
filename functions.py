@@ -84,7 +84,7 @@ def peaks(piezo_voltage, laser_voltage, height, distance, indices=False):
     peaks_xvalues = piezo_voltage[peaks_indices]
 
     widths = peak_widths(laser_voltage, peaks_indices, rel_height=0.5)
-    piezo_voltage_spacing = np.mean(np.diff(piezo_voltage))
+    piezo_voltage_spacing = np.abs(np.mean(np.diff(piezo_voltage)))
     scaled_widths = widths[0]*piezo_voltage_spacing
 
     if indices:
