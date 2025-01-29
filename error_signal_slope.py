@@ -75,7 +75,7 @@ y_min, y_max = plt.gca().get_ylim()
 plt.fill_betweenx(y=np.linspace(y_min, y_max, 100), x1=hwhm.n -
                   hwhm.std_dev, x2=hwhm.n + hwhm.std_dev, color='grey', alpha=0.3)
 plt.xlabel('Frequency modulation [MHz]')
-plt.ylabel('D/sqrt(PcPs)')
+plt.ylabel('D/sqrt(AcAs) [MHz^-1]')
 plt.legend()
 plt.grid()
 plt.tight_layout()
