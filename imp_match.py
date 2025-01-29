@@ -13,7 +13,7 @@ R = 50e-3  # curvature radius
 # section with file specific values
 
 # if using the bessel file, sets all the correct parameters and removes unnecessary peaks the correct way
-bessel = False
+bessel = True
 
 if bessel:
     title = 'bessel00000'
@@ -46,6 +46,7 @@ dips_indices = find_peaks(-reflection, distance=min_distance,
 
 if bessel:
     dips_indices = np.delete(dips_indices, [-1])
+    dips_indices = np.delete(dips_indices, [0])
 
 prominences_tuple = peak_prominences(-reflection, dips_indices)
 prominences = prominences_tuple[0]
