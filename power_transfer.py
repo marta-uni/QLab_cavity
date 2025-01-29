@@ -8,8 +8,10 @@ from scipy.optimize import curve_fit
 data_folder = 'data_non_confocal/clean_data'
 
 peaks_data = pd.read_csv(f'{data_folder}/fitted_parameters.csv')
-peaks_data = peaks_data.iloc[14:]
-peaks_data = peaks_data.drop(29)
+peaks_data = peaks_data.iloc[16:]
+peaks_data = peaks_data.drop(31)
+
+print(peaks_data)
 
 grouped_peaks = {label: group for label,
                  group in peaks_data.groupby(peaks_data['file_name'])}

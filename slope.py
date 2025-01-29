@@ -8,8 +8,9 @@ import piecewise_regression
 #####################################################################################################
 # section with file specific values
 
-title_list = [f'calibrated_error{str(i).zfill(5)}_filtered' for i in range(11, 19)]
-title_list = title_list[:5] + title_list[6:]
+title_list = [
+    f'calibrated_error{str(i).zfill(5)}_filtered' for i in range(1, 7)]
+title_list = title_list[:4] + title_list[5:]
 '''# excluding files with "throw out note" (8 to 10) and error5 file that has a bad error signal
 title_list = title_list[:4] + title_list[5:7] + title_list[10:]'''
 
@@ -32,8 +33,8 @@ d_D = []
 '''mod_f = [50, 40, 30, 20, 10, 5, 40, 40, 40, 40, 40, 40, 40, 40]
 mod_ampl = [510, 310, 250, 150, 30, 8, 360, 300, 250, 200, 140, 110, 400, 450]'''
 
-mod_f = [40, 40, 40, 40, 40, 40, 40]
-mod_ampl = [360, 300, 250, 200, 140, 400, 450]
+mod_f = [50, 40, 30, 20, 10]
+mod_ampl = [510, 310, 250, 150, 30]
 
 for i, title in enumerate(title_list):
     print(title)
@@ -61,7 +62,6 @@ for i, title in enumerate(title_list):
 
     '''plotting, if necessary'''
 
-    
     fname = os.path.join(figure_path, f'calib_refl_plot_{title}.png')
 
     fig, axs = plt.subplots(2, 1, figsize=(8, 6))
@@ -125,6 +125,5 @@ df = pd.DataFrame({
     'mod_ampl': mod_ampl
 })
 
-filename = os.path.join(file_path, 'calib_slopes_power.csv')
+filename = os.path.join(file_path, 'calib_slopes.csv')
 df.to_csv(filename, index=False)
-
