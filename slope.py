@@ -9,13 +9,12 @@ import piecewise_regression
 # section with file specific values
 
 title_list = [f'calibrated_error{str(i).zfill(5)}_filtered' for i in range(11, 19)]
-title_list = title_list[:5] + title_list[6:]
 '''# excluding files with "throw out note" (8 to 10) and error5 file that has a bad error signal
 title_list = title_list[:4] + title_list[5:7] + title_list[10:]'''
 
 '''ind_range = [200, 200, 150, 100, 250, 200, 200,
              200, 200, 200, 200, 150, 200, 200]'''
-ind_range = [200, 200, 200, 200, 200, 200, 200]
+ind_range = [200, 200, 200, 200, 200, 150, 200, 200]
 min_height = 0.04
 min_distance = 1000
 
@@ -32,8 +31,8 @@ d_D = []
 '''mod_f = [50, 40, 30, 20, 10, 5, 40, 40, 40, 40, 40, 40, 40, 40]
 mod_ampl = [510, 310, 250, 150, 30, 8, 360, 300, 250, 200, 140, 110, 400, 450]'''
 
-mod_f = [40, 40, 40, 40, 40, 40, 40]
-mod_ampl = [360, 300, 250, 200, 140, 400, 450]
+mod_f = [40, 40, 40, 40, 40, 40, 40, 40]
+mod_ampl = [360, 300, 250, 200, 140, 110, 400, 450]
 
 for i, title in enumerate(title_list):
     print(title)
