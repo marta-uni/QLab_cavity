@@ -26,7 +26,7 @@ data_folder = 'data_non_confocal/clean_data'
 
 
 def calibrate_write(data, slope, intercept, filepath):
-    data['frequencies'] = slope * data['volt_piezo'] + intercept + 210
+    data['frequencies'] = slope * data['volt_piezo'] + intercept 
     data.to_csv(filepath, index=False)
     return data
 
@@ -35,10 +35,10 @@ data6 = pd.read_csv(f'{data_folder}/error00006.csv')
 data6 = calibrate_write(data6, slope_1, intercept_1,
                         f'{data_folder}/calibrated_error00006_filtered.csv')
 data7 = pd.read_csv(f'{data_folder}/error00007.csv')
-data7 = calibrate_write(data6, slope_1, intercept_1,
+data7 = calibrate_write(data7, slope_1, intercept_1,
                         f'{data_folder}/calibrated_error00007_filtered.csv')
 data16 = pd.read_csv(f'{data_folder}/error00016.csv')
-data16 = calibrate_write(data6, slope_2, intercept_2,
+data16 = calibrate_write(data16, slope_2, intercept_2,
                          f'{data_folder}/calibrated_error00016_filtered.csv')
 
 plt.figure(figsize=(12, 6))
@@ -46,7 +46,6 @@ plt.scatter(data6['frequencies'], data6['transmission'],
             label='Data', color='green')
 plt.xlabel('Frequency [MHz]')
 plt.ylabel('Transmission [V]')
-plt.xlim(-35, 50)
 plt.legend()
 plt.xticks(rotation=45)
 plt.grid()
@@ -58,7 +57,7 @@ plt.scatter(data7['frequencies'], data7['transmission'],
             label='Data', color='green')
 plt.xlabel('Frequency [MHz]')
 plt.ylabel('Transmission [V]')
-plt.xlim(-35, 50)
+plt.xlim(-1500, -1430)
 plt.legend()
 plt.xticks(rotation=45)
 plt.grid()
@@ -70,7 +69,6 @@ plt.scatter(data16['frequencies'], data16['transmission'],
             label='Data', color='green')
 plt.xlabel('Frequency [MHz]')
 plt.ylabel('Transmission [V]')
-plt.xlim(-35, 50)
 plt.legend()
 plt.xticks(rotation=45)
 plt.grid()

@@ -9,7 +9,6 @@ data_folder = 'data_non_confocal/clean_data'
 
 peaks_data = pd.read_csv(f'{data_folder}/fitted_parameters.csv')
 peaks_data = peaks_data.iloc[14:]
-peaks_data = peaks_data.drop(index=29)
 
 grouped_peaks = {label: group for label,
                  group in peaks_data.groupby(peaks_data['file_name'])}
@@ -24,6 +23,15 @@ dA_c = []
 for label, df in grouped_peaks.items():
     total_sum = sum(unp.uarray(
         df['A'].to_numpy(), df['A_uncertainty'].to_numpy()))
+    A_0.append(total_sum.n)
+    dA_0.append(total_sum.std_dev)
+    
+    if label == 'error00016':
+        A_s.append(0)
+        dA_s.append(0)
+        A_c.append(total_sum.n)
+        dA_c.append(total_sum.std_dev)
+        continue
 
     carrier = df[df['peak'] == 2]['A'].values[0]
     d_carrier = df[df['peak'] == 2]['A_uncertainty'].values[0]
@@ -35,8 +43,6 @@ for label, df in grouped_peaks.items():
     u_sb = [ufloat(val, err) for val, err in zip(sb, sb_unc)]
     sb_mean = sum(u_sb)/2
 
-    A_0.append(total_sum.n)
-    dA_0.append(total_sum.std_dev)
     A_s.append(sb_mean.n)
     dA_s.append(sb_mean.std_dev)
     A_c.append(carrier)
