@@ -8,12 +8,15 @@ from scipy.optimize import curve_fit
 data_folder = 'data_non_confocal/clean_data'
 
 peaks_data = pd.read_csv(f'{data_folder}/fitted_parameters_freqs.csv')
+peaks_data = peaks_data.iloc[:12]
+
+print(peaks_data)
 
 gamma_values = peaks_data.loc[peaks_data['peak'] == 2, 'gamma']
 gamma_unc = peaks_data.loc[peaks_data['peak'] == 2, 'gamma_uncertainty']
 
 hwhm = sum(unp.uarray(gamma_values.to_numpy(),
-           gamma_unc.to_numpy())) / len(gamma_values.index)
+           gamma_unc.to_numpy())) / len(gamma_values.index) * 2
 
 grouped_peaks = {label: group for label,
                  group in peaks_data.groupby(peaks_data['file_name'])}
@@ -70,7 +73,7 @@ plt.figure()
 plt.errorbar(mod_f, y_fit, dy_fit, ls='', label='Data', color='blue', fmt='.')
 plt.plot(xplot, linear(xplot, *popt),
          label='Linear Fit', color='red', linewidth=2)
-plt.axvline(hwhm.n, color='black', label='HWHM')
+plt.axvline(hwhm.n, color='black', label=f'2*HWHM: {hwhm} MHz')
 y_min, y_max = plt.gca().get_ylim()
 plt.fill_betweenx(y=np.linspace(y_min, y_max, 100), x1=hwhm.n -
                   hwhm.std_dev, x2=hwhm.n + hwhm.std_dev, color='grey', alpha=0.3)
