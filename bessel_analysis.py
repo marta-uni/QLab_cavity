@@ -6,10 +6,17 @@ from scipy.special import jv
 from scipy.optimize import fsolve, curve_fit
 
 df = pd.read_csv('data_bessel/clean_data/bessel_sidebands.csv')
+df = df[df['title'] != 'bessel00003']
+df = df[df['title'] != 'bessel00004']
+
+print(df)
 
 grouped_data = {label: group for label, group in df.groupby(df['title'])}
 
-mod_ampl = np.array([10, 50, 110, 140, 170, 180, 190, 200, 220,
+'''mod_ampl = np.array([10, 50, 110, 140, 170, 180, 190, 200, 220,
+                     250, 270, 290, 310, 330, 350, 370, 390, 410, 430, 450])/1000'''
+
+mod_ampl = np.array([10, 50, 110, 180, 190, 200, 220,
                      250, 270, 290, 310, 330, 350, 370, 390, 410, 430, 450])/1000
 
 A_s1 = []
