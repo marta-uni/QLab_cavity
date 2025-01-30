@@ -47,6 +47,7 @@ for label, df in grouped_peaks.items():
 slope_data = pd.read_csv(f'{data_folder}/calib_slopes.csv')
 
 mod_f = slope_data['mod_f'].to_numpy()
+mod_ampl = slope_data['mod_ampl'].to_numpy()/1000
 
 D_values = np.abs(slope_data['D'].to_numpy())
 d_D = slope_data['d_D'].to_numpy()
@@ -92,11 +93,13 @@ y = (jv(1, x))**2 / (jv(0, x))**2
 beta = [fsolve(partial(extract_beta, asac=ratio.nominal_value), 0.9)[0]
         for ratio in As_Ac]
 
+v_pi = mod_ampl * np.pi / beta
+
 plt.figure()
-plt.plot(mod_f, beta, color='red', linewidth=2, marker='o')
+plt.plot(mod_f, v_pi, color='red', linewidth=2, marker='o')
 plt.xlabel('Frequency modulation [MHz]')
-plt.ylabel(r'$\beta$')
+plt.ylabel(r'$\text{V}_{\pi}$ [V]')
 plt.grid()
 plt.tight_layout()
-plt.savefig('data_non_confocal/figures/beta_bad_estimate.png')
+plt.savefig('data_non_confocal/figures/v_pi_estimate.png')
 plt.show()
