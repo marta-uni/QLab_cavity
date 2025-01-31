@@ -95,13 +95,23 @@ y = (jv(1, x))**2 / (jv(0, x))**2
 beta = [fsolve(partial(extract_beta, asac=ratio.nominal_value), 0.9)[0]
         for ratio in As_Ac]
 
+print(beta)
+
 v_pi = mod_ampl * np.pi / beta
 
+def linear(x, a, b):
+    return a * x + b
+
+popt, pcov = curve_fit(linear, mod_f, v_pi)
+x_line = np.linspace(min(mod_f), max(mod_f))
+
 plt.figure()
-plt.scatter(mod_f, v_pi, color='black', marker='o', s=20)
+plt.scatter(mod_f, v_pi, color='blue', marker='o', s=20, label='data')
+plt.plot(x_line, linear(x_line, *popt), color='red', linewidth=2, label='linear fit')
 plt.xlabel('Frequency modulation [MHz]')
 plt.ylabel(r'$\text{V}_{\pi}$ [V]')
 plt.grid()
+plt.legend()
 plt.tight_layout()
 plt.savefig('data_non_confocal/figures/v_pi_estimate.png')
 plt.show()
