@@ -4,14 +4,13 @@ import numpy as np
 from uncertainties import ufloat
 import uncertainties.unumpy as unp
 from scipy.optimize import curve_fit
+from scipy import odr
 
 data_folder = 'data_non_confocal/clean_data'
 
 peaks_data = pd.read_csv(f'{data_folder}/fitted_parameters.csv')
 peaks_data = peaks_data.iloc[16:]
 peaks_data = peaks_data.drop(31)
-
-print(peaks_data)
 
 grouped_peaks = {label: group for label,
                  group in peaks_data.groupby(peaks_data['file_name'])}
@@ -51,49 +50,69 @@ slope_data = pd.read_csv(f'{data_folder}/calib_slopes_power.csv')
 
 # D units are V/MHz
 
-D_unc = unp.uarray(
-    np.abs(slope_data['D'].to_numpy()), slope_data['d_D'].to_numpy())
+D_values = np.abs(slope_data['D'].to_numpy())
+D_unc = slope_data['d_D'].to_numpy()
 
-y_unc = D_unc / unp.uarray(A_0, dA_0)
+mask = (x_unc_c0 > 0.7)
+x_unc_c0 = x_unc_c0[mask]
+x_unc_sc = x_unc_sc[mask]
+D_values = D_values[mask]
+D_unc = D_unc[mask]
 
-y_data = unp.nominal_values(y_unc)
-dy_data = unp.std_devs(y_unc)
 x_c0 = unp.nominal_values(x_unc_c0)
 dx_c0 = unp.std_devs(x_unc_c0)
 x_sc = unp.nominal_values(x_unc_sc)
 dx_sc = unp.std_devs(x_unc_sc)
 
 
-def circle(x, a):
-    return a * np.sqrt(x * (1 - x))
+def circle(par, x):
+    return par[0] * np.sqrt(x * (1 - x))
 
 
-def other_func(x, a):
-    factor = 1/(1+2*x)
-    return a * np.sqrt(factor * (1 - factor))
+def other_func(par, x):
+    ratio = 1/(1+2*x)
+    return par[0] * np.sqrt(ratio * (1 - ratio))
 
 
-xplot = np.linspace(0, 1, 500)
-yplot_c0 = circle(xplot, 3)
-yplot_sc = other_func(xplot, 3)
+circle_model = odr.Model(circle)
+other_model = odr.Model(other_func)
+aca0_data = odr.RealData(x_c0, D_values, dx_c0, D_unc)
+asac_data = odr.RealData(x_sc, D_values, dx_sc, D_unc)
+odr_circle = odr.ODR(aca0_data, circle_model, beta0=[0.4])
+odr_other = odr.ODR(asac_data, other_model, beta0=[0.4])
+out_circle = odr_circle.run()
+out_other = odr_other.run()
+out_circle.pprint()
+out_other.pprint()
+
+
+xplot_circ = np.linspace(0.4, 1, 500)
+xplot_other = np.linspace(0, 0.6, 500)
+yplot_c0 = circle(out_circle.beta, xplot_circ)
+yplot_sc = other_func(out_other.beta, xplot_other)
+
+fit_label_circ = f'Fit: C = {out_circle.beta[0]:.2g} $\\pm$ {out_circle.sd_beta[0]:.2f} V/MHz'
+fit_label_other = f'Fit: C = {out_other.beta[0]:.2g} $\\pm$ {out_other.sd_beta[0]:.2g} V/MHz'
 
 plt.figure()
-plt.errorbar(x_c0, y_data, yerr=dy_data, xerr=dx_c0,
+plt.errorbar(x_c0, D_values, yerr=D_unc, xerr=dx_c0,
              ls='', label='Data', color='blue', fmt='.')
-plt.plot(xplot, yplot_c0, label='Expected behaviour', color='red', linewidth=2)
+plt.plot(xplot_circ, yplot_c0, label=fit_label_circ, color='red', linewidth=2)
 plt.xlabel('Ac/A0')
-plt.ylabel('D/A0 [MHz^-1]')
+plt.ylabel('D [V/MHz]')
+plt.title(r'Power transfer: $\text{D}=\text{C}\sqrt{\frac{A_c}{A_0}\left(1-\frac{A_c}{A_0}\right)}$')
 plt.legend()
 plt.grid()
 plt.tight_layout()
 plt.savefig('data_non_confocal/figures/power_transfer_c0.png')
 
 plt.figure()
-plt.errorbar(x_sc, y_data, yerr=dy_data, xerr=dx_c0,
+plt.errorbar(x_sc, D_values, yerr=D_unc, xerr=dx_c0,
              ls='', label='Data', color='blue', fmt='.')
-plt.plot(xplot, yplot_sc, label='Expected behaviour', color='red', linewidth=2)
+plt.plot(xplot_other, yplot_sc, label=fit_label_other, color='red', linewidth=2)
 plt.xlabel('As/Ac')
-plt.ylabel('D/A0 [MHz^-1]')
+plt.ylabel('D [V/MHz]')
+plt.title(r'Power transfer: $\text{D}=\text{C}\sqrt{\frac{1}{1+2\frac{A_c}{A_0}}\left(1-\frac{1}{1+2\frac{A_c}{A_0}}\right)}$')
 plt.legend()
 plt.grid()
 plt.tight_layout()
