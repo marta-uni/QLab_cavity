@@ -12,7 +12,9 @@ data_folder = 'data_non_confocal/clean_data'
 peaks_data = pd.read_csv(f'{data_folder}/fitted_parameters_freqs.csv')
 peaks_data = peaks_data.iloc[:12]
 
-print(peaks_data)
+data6 = pd.read_csv(f'{data_folder}/fitted_parameters_freq6.csv')
+peaks_data = pd.concat([peaks_data, data6], ignore_index=True)
+
 
 gamma_values = peaks_data.loc[peaks_data['peak'] == 2, 'gamma']
 gamma_unc = peaks_data.loc[peaks_data['peak'] == 2, 'gamma_uncertainty']
@@ -96,7 +98,7 @@ beta = [fsolve(partial(extract_beta, asac=ratio.nominal_value), 0.9)[0]
 v_pi = mod_ampl * np.pi / beta
 
 plt.figure()
-plt.plot(mod_f, v_pi, color='red', linewidth=2, marker='o')
+plt.scatter(mod_f, v_pi, color='black', marker='o', s=20)
 plt.xlabel('Frequency modulation [MHz]')
 plt.ylabel(r'$\text{V}_{\pi}$ [V]')
 plt.grid()
