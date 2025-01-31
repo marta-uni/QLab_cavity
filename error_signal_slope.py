@@ -54,24 +54,9 @@ mod_ampl = slope_data['mod_ampl'].to_numpy()/1000
 D_values = np.abs(slope_data['D'].to_numpy())
 d_D = slope_data['d_D'].to_numpy()
 
-
-def linear(x, a, b):
-    return a * x + b
-
-
-popt, pcov = curve_fit(linear, xdata=mod_f, ydata=D_values, p0=[
-                       0, np.mean(D_values)], sigma=d_D, absolute_sigma=True)
-
-print(f'Fit result: a = {popt[0]} +/- {np.sqrt(pcov[0, 0])} V*MHz^-2')
-print(f'b = {popt[1]} +/- {np.sqrt(pcov[1, 1])} V')
-
-xplot = np.linspace(mod_f[0], mod_f[-1], 100)
-
 plt.figure()
-plt.errorbar(mod_f, D_values, d_D, ls='', label='Data', color='blue', fmt='.')
-plt.plot(xplot, linear(xplot, *popt),
-         label='Linear Fit', color='red', linewidth=2)
-plt.axvline(hwhm.n, color='black', label=f'2*HWHM: {hwhm} MHz')
+plt.errorbar(mod_f, D_values, d_D, ls='', label='Data', color='blue', fmt='.', capsize=5)
+plt.axvline(hwhm.n, color='black', label=f'FWHM: {hwhm} MHz')
 y_min, y_max = plt.gca().get_ylim()
 plt.fill_betweenx(y=np.linspace(y_min, y_max, 100), x1=hwhm.n -
                   hwhm.std_dev, x2=hwhm.n + hwhm.std_dev, color='grey', alpha=0.3)
@@ -92,22 +77,37 @@ def extract_beta(x, asac):
 x = np.linspace(0, 2, 100)
 y = (jv(1, x))**2 / (jv(0, x))**2
 
-beta = [fsolve(partial(extract_beta, asac=ratio.nominal_value), 0.9)[0]
-        for ratio in As_Ac]
+beta = np.array([fsolve(partial(extract_beta, asac=ratio.nominal_value), 0.9)[0]
+        for ratio in As_Ac])
 
-print(beta)
+beta_plus = np.array([fsolve(partial(extract_beta, asac=(ratio.nominal_value + ratio.std_dev)), 1)[0]
+             for ratio in As_Ac])
+
+beta_minus = np.array([fsolve(partial(extract_beta, asac=(ratio.nominal_value - ratio.std_dev)), 1)[0]
+              for ratio in As_Ac])
+
+beta_plus = np.abs(beta_plus - beta)
+beta_minus = np.abs(beta_minus - beta)
+
+d_beta = [max(a, b) for a, b in zip(beta_minus, beta_plus)]
+beta = unp.uarray(beta, d_beta)
 
 v_pi = mod_ampl * np.pi / beta
+
 
 def linear(x, a, b):
     return a * x + b
 
-popt, pcov = curve_fit(linear, mod_f, v_pi)
+
+popt, pcov = curve_fit(linear, mod_f, unp.nominal_values(
+    v_pi), sigma=unp.std_devs(v_pi), absolute_sigma=True)
 x_line = np.linspace(min(mod_f), max(mod_f))
 
 plt.figure()
-plt.scatter(mod_f, v_pi, color='blue', marker='o', s=20, label='data')
-plt.plot(x_line, linear(x_line, *popt), color='red', linewidth=2, label='linear fit')
+plt.errorbar(mod_f, unp.nominal_values(v_pi), yerr=unp.std_devs(
+    v_pi), color='blue', marker='.', ls='', label='data', capsize=5)
+plt.plot(x_line, linear(x_line, *popt), color='red',
+         linewidth=2, label='linear fit')
 plt.xlabel('Frequency modulation [MHz]')
 plt.ylabel(r'$\text{V}_{\pi}$ [V]')
 plt.grid()

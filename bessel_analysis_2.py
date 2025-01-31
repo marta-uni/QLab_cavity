@@ -172,11 +172,11 @@ def sb1r_func(par, x):
 
 
 def sb2l_func(par, x):
-    return (-jv(2, x) + par[0]/2*(jv(1, x) + jv(3, x)))**2
+    return (jv(2, x) - par[0]/2*(jv(1, x) + jv(3, x)))**2
 
 
 def sb2r_func(par, x):
-    return (-jv(2, x) + par[0]/2*(jv(1, x) + jv(3, x)))**2
+    return (jv(2, x) + par[0]/2*(jv(1, x) + jv(3, x)))**2
 
 
 def odr_fit(func, x, y, xerr, yerr, beta0):
