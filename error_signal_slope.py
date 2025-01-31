@@ -83,7 +83,7 @@ beta = np.array([fsolve(partial(extract_beta, asac=ratio.nominal_value), 0.9)[0]
 beta_plus = np.array([fsolve(partial(extract_beta, asac=(ratio.nominal_value + ratio.std_dev)), 1)[0]
              for ratio in As_Ac])
 
-beta_minus = np.array([fsolve(partial(extract_beta, asac=(ratio.nominal_value - ratio.std_dev)), 1)[0]
+beta_minus = np.array([fsolve(partial(extract_beta, asac=(ratio.nominal_value - ratio.std_dev)), 0.8)[0]
               for ratio in As_Ac])
 
 beta_plus = np.abs(beta_plus - beta)
