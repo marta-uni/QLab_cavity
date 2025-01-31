@@ -3,7 +3,9 @@ import functions as fn
 import numpy as np
 import os
 import matplotlib.pyplot as plt
-from scipy.signal import find_peaks, peak_widths, peak_prominences
+from scipy.signal import find_peaks, peak_widths
+from uncertainties import ufloat
+import uncertainties.unumpy as unp
 
 c = 3e8  # speed of light
 R = 50e-3  # curvature radius
@@ -11,19 +13,10 @@ R = 50e-3  # curvature radius
 #####################################################################################################
 # section with file specific values
 
-# if using the bessel file, sets all the correct parameters and removes unnecessary peaks the correct way
-bessel = True
-
-if bessel:
-    title = 'bessel00000'
-    # find_peaks parameters
-    min_prominence = 0.01
-    min_distance = 900
-else:
-    title = 'imp_match00000'
-    # find_peaks parameters
-    min_prominence = 0.035
-    min_distance = 200
+title = 'bessel00000'
+# find_peaks parameters
+min_prominence = 0.01
+min_distance = 900
 
 path = f'data_imp_match/clean_data/{title}.csv'
 figure_path = 'data_imp_match/figures/dips/'
@@ -43,15 +36,11 @@ volt_piezo = data['volt_piezo'].to_numpy()
 dips_indices = find_peaks(-reflection, distance=min_distance,
                           prominence=min_prominence)[0]
 
-if bessel:
-    dips_indices = np.delete(dips_indices, [-1])
-    dips_indices = np.delete(dips_indices, [0])
 
-prominences_tuple = peak_prominences(-reflection, dips_indices)
-prominences = prominences_tuple[0]
+dips_indices = np.delete(dips_indices, [-1])
+dips_indices = np.delete(dips_indices, [0])
 
-widths_ind = peak_widths(-reflection, dips_indices,
-                         rel_height=1, prominence_data=prominences_tuple)[0]
+widths_ind = peak_widths(-reflection, dips_indices, rel_height=1)[0]
 
 piezo_pk = volt_piezo[dips_indices]
 refl_pk = reflection[dips_indices]
@@ -67,92 +56,65 @@ for start, end in ranges_to_remove:
     remove_indices.update(range(start, end))
 
 refl_no_dips = [r for i, r in enumerate(reflection) if i not in remove_indices]
-v_piezo_no_dips = [v for i, v in enumerate(
-    volt_piezo) if i not in remove_indices]
+v_piezo_no_dips = np.array([v for i, v in enumerate(
+    volt_piezo) if i not in remove_indices])
 
-coeffs = np.polyfit(v_piezo_no_dips, refl_no_dips, 1)
+coeffs, V = np.polyfit(v_piezo_no_dips, refl_no_dips, 1, cov='unscaled')
 x = np.linspace(volt_piezo[0], volt_piezo[-1], 100)
 lin = coeffs[0] * x + coeffs[1]
-lin_label = f'slope = {coeffs[0]:.2g}\nintercept = {coeffs[1]:.2g}'
+slope = ufloat(coeffs[0], np.sqrt(V[0, 0]))
+intercept = ufloat(coeffs[1], np.sqrt(V[1 ,1]))
+lin_label = f'Slope = {slope}\nIntercept = {intercept} V'
 
+'''find uncertainty on peak estimate'''
 
-'''compute prominence sum'''
-
-with open(f'data_imp_match/{title}.txt', 'w') as file:
-    if bessel:
-        file.write(f'Sum of depths = {sum(prominences)} V\n\n')
-    else:
-        file.write('Without removing any peak\n')
-        file.write(f'Sum of depths = {sum(prominences)} V\n\n')
-
-        file.write('Consider clear even and odd modes\n')
-        mask = (dips_indices < 7000)
-        dips_indices = dips_indices[mask]
-        prominences = prominences[mask]
-        file.write(f'Sum of depths = {sum(prominences)} V\n\n')
-
-        file.write('Consider only even modes\n')
-        mask = (dips_indices > 2000) & (dips_indices < 7000)
-        dips_indices = dips_indices[mask]
-        prominences = prominences[mask]
-        file.write(f'Sum of depths = {sum(prominences)} V\n\n')
+noise = refl_no_dips - (coeffs[0] * v_piezo_no_dips + coeffs[1])
+pk_uncertainty = np.std(noise)
+d_reflpk = [pk_uncertainty]*len(refl_pk)
 
 '''plot'''
 
 plt.figure()
 plt.scatter(volt_piezo, reflection, label='Reflection',
             color='red', marker='.')
-plt.scatter(piezo_pk, refl_pk, label='Dips',
-            color='blue', marker='x')
+plt.errorbar(piezo_pk, refl_pk, yerr=d_reflpk, label='Dips', ls='',
+             color='blue', marker='.', capsize=5)
 plt.plot(x, lin, label=lin_label, color='green')
 plt.xlabel('Volt piezo [V]')
 plt.ylabel('Reflection signal [V]')
+plt.yscale('log')
 plt.grid()
 plt.legend()
 plt.tight_layout()
 plt.savefig(figure_path + title + '_dips.png')
 
 
-'''another way to compute prominences'''
+'''compute depths'''
 
-prom_2 = coeffs[0] * piezo_pk + coeffs[1] - refl_pk
+refl_pk_unc = unp.uarray(refl_pk, d_reflpk)
 
-if bessel:
-    with open(f'data_imp_match/{title}.txt', 'a') as file:
-        file.write('Alternative calculation of prominence sum:\n\n')
-        file.write(f'Sum of depths = {sum(prom_2)} V')
+# prom_2 = slope * piezo_pk + intercept - refl_pk_unc
 
-prominences = np.flip(prominences, axis=0)
+baseline = ufloat(np.mean(refl_no_dips), pk_uncertainty)
+prom_2 = baseline - refl_pk_unc
+
 prom_2 = np.flip(prom_2, axis=0)
-line_val = np.flip(coeffs[0] * piezo_pk + coeffs[1], axis=0)
-refl_pk = np.flip(refl_pk, axis=0)
+line_val = np.flip(slope * piezo_pk + intercept, axis=0)
+refl_pk_unc = np.flip(refl_pk_unc, axis=0)
 spacing = np.flip(np.diff(piezo_pk))
-end_peaks = refl_pk + prominences
 
 
-print('prominences')
-print(prominences)
-print('line - depth')
-print(prom_2)
-print('line values')
-print(line_val)
-print('line coefficients')
-print(coeffs)
-print('depth values')
-print(refl_pk)
-print('end of peaks')
-print(end_peaks)
-print('spacing')
-print(spacing)
+with open(f'data_imp_match/{title}_baseline.txt', 'w') as file:
+    file.write(f'Sum of depths = {sum(prom_2)} V\n\n')
+    file.write(lin_label)
+    file.write('\n\nDepth of single dips in V:\n')
+    file.write(str(prom_2))
+    file.write('\n\n\"Baseline\" of single dips:\n')
+    # file.write(str(line_val))
+    file.write(str(baseline))
+    file.write('\n\nReflection values at dips:\n')
+    file.write(str(refl_pk_unc))
+    file.write('\n\nSpacings in piezo V:')
+    file.write(str(spacing))
 
-
-bin_centers = range(0, len(prominences))
-
-plt.figure()
-plt.bar(bin_centers, prom_2, width=1, edgecolor='black', alpha=0.7)
-plt.xlabel('Peak index')
-plt.ylabel('Reflection dip [V]')
-plt.grid()
-plt.tight_layout()
-plt.savefig(figure_path + title + '_histogram.png')
 plt.show()

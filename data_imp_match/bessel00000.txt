@@ -1,5 +1,0 @@
-Sum of depths = 0.604778 V
-
-Alternative calculation of prominence sum:
-
-Sum of depths = 0.49739144002760916 V
