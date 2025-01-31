@@ -95,25 +95,27 @@ refl_pk_unc = unp.uarray(refl_pk, d_reflpk)
 
 # prom_2 = slope * piezo_pk + intercept - refl_pk_unc
 
-baseline = ufloat(np.mean(refl_no_dips), pk_uncertainty)
-prom_2 = baseline - refl_pk_unc
+# baseline = ufloat(np.mean(refl_no_dips), pk_uncertainty)
+# prom_2 = baseline - refl_pk_unc
+
+prom_2 = unp.uarray(np.mean(refl_no_dips) - refl_pk, pk_uncertainty)
 
 prom_2 = np.flip(prom_2, axis=0)
-line_val = np.flip(slope * piezo_pk + intercept, axis=0)
-refl_pk_unc = np.flip(refl_pk_unc, axis=0)
+'''line_val = np.flip(slope * piezo_pk + intercept, axis=0)
+refl_pk_unc = np.flip(refl_pk_unc, axis=0)'''
 spacing = np.flip(np.diff(piezo_pk))
 
 
-with open(f'data_imp_match/{title}_baseline.txt', 'w') as file:
+with open(f'data_imp_match/{title}_rough.txt', 'w') as file:
     file.write(f'Sum of depths = {sum(prom_2)} V\n\n')
     file.write(lin_label)
     file.write('\n\nDepth of single dips in V:\n')
     file.write(str(prom_2))
-    file.write('\n\n\"Baseline\" of single dips:\n')
+    '''file.write('\n\n\"Baseline\" of single dips:\n')
     # file.write(str(line_val))
-    file.write(str(baseline))
-    file.write('\n\nReflection values at dips:\n')
-    file.write(str(refl_pk_unc))
+    file.write(str(baseline))'''
+    '''file.write('\n\nReflection values at dips:\n')
+    file.write(str(refl_pk_unc))'''
     file.write('\n\nSpacings in piezo V:')
     file.write(str(spacing))
 
