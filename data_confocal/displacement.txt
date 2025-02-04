@@ -174,3 +174,91 @@ Close peaks separation in odd modes:
 Assuming confocality:	19.06 +/- 0.11 MHz	16.72 +/- 0.13 MHz
 Without assuming confocality:	19.02 +/- 0.11 MHz	16.66 +/- 0.13 MHz
 
+file: scope_15
+Simple displacement estimation: frequency separation between odd modes and half the fsr.
+Assuming confocality:	24 MHz	-28 MHz
+Without assuming confocality:	25 MHz	-27 MHz
+Close peaks separation in odd modes:
+Assuming confocality:	18.56 +/- 0.15 MHz	17.92 +/- 0.11 MHz
+Without assuming confocality:	18.52 +/- 0.15 MHz	17.84 +/- 0.11 MHz
+
+file: scope_16
+Simple displacement estimation: frequency separation between odd modes and half the fsr.
+Assuming confocality:	29 MHz	-25 MHz
+Without assuming confocality:	31 MHz	-24 MHz
+Close peaks separation in odd modes:
+Assuming confocality:	17.07 +/- 0.15 MHz	17.26 +/- 0.10 MHz
+Without assuming confocality:	17.04 +/- 0.15 MHz	17.16 +/- 0.10 MHz
+
+file: scope_17
+Simple displacement estimation: frequency separation between odd modes and half the fsr.
+Assuming confocality:	16 MHz	-32 MHz
+Without assuming confocality:	15 MHz	-33 MHz
+Close peaks separation in odd modes:
+Assuming confocality:	19.36 +/- 0.16 MHz	17.00 +/- 0.10 MHz
+Without assuming confocality:	19.29 +/- 0.16 MHz	16.95 +/- 0.10 MHz
+
+file: scope_18
+Simple displacement estimation: frequency separation between odd modes and half the fsr.
+Assuming confocality:	14 MHz	-28 MHz
+Without assuming confocality:	13 MHz	-28 MHz
+Close peaks separation in odd modes:
+Assuming confocality:	17.97 +/- 0.44 MHz	17.20 +/- 0.13 MHz
+Without assuming confocality:	17.91 +/- 0.44 MHz	17.17 +/- 0.13 MHz
+
+file: scope_19
+Simple displacement estimation: frequency separation between odd modes and half the fsr.
+Assuming confocality:	11 MHz	-20 MHz
+Without assuming confocality:	10 MHz	-21 MHz
+Close peaks separation in odd modes:
+Assuming confocality:	17.47 +/- 0.28 MHz	17.68 +/- 0.11 MHz
+Without assuming confocality:	17.43 +/- 0.28 MHz	17.65 +/- 0.11 MHz
+
+file: scope_20
+Simple displacement estimation: frequency separation between odd modes and half the fsr.
+Assuming confocality:	14 MHz	-13 MHz
+Without assuming confocality:	15 MHz	-13 MHz
+Close peaks separation in odd modes:
+Assuming confocality:	16.68 +/- 0.21 MHz	17.49 +/- 0.09 MHz
+Without assuming confocality:	16.66 +/- 0.21 MHz	17.45 +/- 0.09 MHz
+
+file: scope_21
+Simple displacement estimation: frequency separation between odd modes and half the fsr.
+Assuming confocality:	-3 MHz	-25 MHz
+Without assuming confocality:	-5 MHz	-26 MHz
+Close peaks separation in odd modes:
+Assuming confocality:	22.26 +/- 0.34 MHz	16.35 +/- 0.09 MHz
+Without assuming confocality:	22.18 +/- 0.34 MHz	16.37 +/- 0.09 MHz
+
+file: scope_22
+Simple displacement estimation: frequency separation between odd modes and half the fsr.
+Assuming confocality:	23 MHz	-24 MHz
+Without assuming confocality:	24 MHz	-23 MHz
+Close peaks separation in odd modes:
+Assuming confocality:	16.18 +/- 0.33 MHz	17.59 +/- 0.15 MHz
+Without assuming confocality:	16.15 +/- 0.33 MHz	17.52 +/- 0.15 MHz
+
+file: scope_23
+Simple displacement estimation: frequency separation between odd modes and half the fsr.
+Assuming confocality:	23 MHz	-19 MHz
+Without assuming confocality:	25 MHz	-19 MHz
+Close peaks separation in odd modes:
+Assuming confocality:	18.50 +/- 0.17 MHz	18.21 +/- 0.11 MHz
+Without assuming confocality:	18.47 +/- 0.17 MHz	18.13 +/- 0.11 MHz
+
+file: scope_24
+Simple displacement estimation: frequency separation between odd modes and half the fsr.
+Assuming confocality:	11 MHz	-28 MHz
+Without assuming confocality:	10 MHz	-29 MHz
+Close peaks separation in odd modes:
+Assuming confocality:	16.70 +/- 0.16 MHz	17.62 +/- 0.16 MHz
+Without assuming confocality:	16.65 +/- 0.16 MHz	17.59 +/- 0.16 MHz
+
+file: scope_25
+Simple displacement estimation: frequency separation between odd modes and half the fsr.
+Assuming confocality:	16 MHz	-21 MHz
+Without assuming confocality:	16 MHz	-21 MHz
+Close peaks separation in odd modes:
+Assuming confocality:	19.06 +/- 0.11 MHz	16.72 +/- 0.13 MHz
+Without assuming confocality:	19.02 +/- 0.11 MHz	16.66 +/- 0.13 MHz
+
